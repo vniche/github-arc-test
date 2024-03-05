@@ -26,15 +26,12 @@ jobs:
           echo "name:        ${{ steps.import-gpg.outputs.name }}"
           echo "email:       ${{ steps.import-gpg.outputs.email }}"
 
-      - name: Prepare GPG
-        run: |
-          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
-          gpgconf --reload gpg-agent
-
       - name: Sign commit and push changes
         run: |
           git config --global user.email "${{ steps.import-gpg.outputs.email }}"
           git config --global user.name "${{ steps.import-gpg.outputs.name }}"
           NOW=$(date)
+          echo $NOW > latest_datetime.txt
+          git add latest_datetime.txt
           git commit -S --allow-empty -m "Example 02: update datetime to ${NOW}"
           git push
