@@ -33,5 +33,5 @@ jobs:
           NOW=$(date)
           echo $NOW > latest_datetime.txt
           git add latest_datetime.txt
-          git commit -S --allow-empty -m "Example 02: update datetime to ${NOW}"
+          GIT_TRACE=1 git commit -S --allow-empty -m "Example 02: update datetime to ${NOW}"
           git push
