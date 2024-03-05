@@ -26,6 +26,11 @@ jobs:
           echo "name:        ${{ steps.import-gpg.outputs.name }}"
           echo "email:       ${{ steps.import-gpg.outputs.email }}"
 
+      - name: Prepare GPG
+        run: |
+          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+          gpgconf --reload gpg-agent
+
       - name: Sign commit and push changes
         run: |
           git config --global user.email "${{ steps.import-gpg.outputs.email }}"
