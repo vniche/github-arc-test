@@ -14,7 +14,7 @@ jobs:
         uses: crazy-max/ghaction-import-gpg@v6
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
+          passphrase: ${{ secrets.GPG_KEY_PASSPHRASE }}
           git_user_signingkey: true
           git_commit_gpgsign: true
 
@@ -25,19 +25,10 @@ jobs:
           echo "name:        ${{ steps.import-gpg.outputs.name }}"
           echo "email:       ${{ steps.import-gpg.outputs.email }}"
 
-      - name: Prepare GPG
-        run: |
-          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
-          gpgconf --reload gpg-agent
-
       - name: Sign commit and push changes
         run: |
-          git config --global user.signingkey CCB652A235F57A1C
           git config --global user.email "${{ steps.import-gpg.outputs.email }}"
           git config --global user.name "${{ steps.import-gpg.outputs.name }}"
-          cat ~/.gitconfig
           NOW=$(date)
-          echo $NOW > latest_datetime.txt
-          git add latest_datetime.txt
           GIT_TRACE=1 git commit -S --allow-empty -m "Example 02: update datetime to ${NOW}"
           git push
